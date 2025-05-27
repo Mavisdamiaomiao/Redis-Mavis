@@ -10,7 +10,7 @@
 
 int main(int argc, char **argv) {
   // Flush after every std::cout / std::cerr
-  std::cout << std::unitbuf;
+  std::cout << std::unitbuf; //每次输出后都刷新缓冲区，unitbuf为I/O操纵符
   std::cerr << std::unitbuf;
   
   int server_fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -45,10 +45,10 @@ int main(int argc, char **argv) {
   
   struct sockaddr_in client_addr;
   int client_addr_len = sizeof(client_addr);
-  std::cout << "Waiting for a client to connect...\n";
+  std::cout << "Waiting for a client to connect...\n";   // \n等价于std::endl，不过endl会刷新缓冲区，而前面已经设置了自动刷新缓冲区
 
   // You can use print statements as follows for debugging, they'll be visible when running tests.
-  std::cout << "Logs from your program will appear here!\n";
+  // std::cout << "Logs from your program will appear here!\n";
 
   // Uncomment this block to pass the first stage
   // 
@@ -57,5 +57,9 @@ int main(int argc, char **argv) {
   // 
   // close(server_fd);
 
+  accept(server_fd, (struct sockaddr *) &client_addr, (socklen_t *) &client_addr_len);
+  std::cout << "Client connected\n";
+
+  close(server_fd);
   return 0;
 }
