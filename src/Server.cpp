@@ -10,7 +10,7 @@
 
 int main(int argc, char **argv) {
   // Flush after every std::cout / std::cerr
-  std::cout << std::unitbuf; //每次输出后都刷新缓冲区，unitbuf为I/O操纵符
+  std::cout << std::unitbuf; //每次输出后都刷新缓冲区，unitbuf为I/O操纵符,方便调试
   std::cerr << std::unitbuf;
   
   int server_fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -57,9 +57,14 @@ int main(int argc, char **argv) {
   // 
   // close(server_fd);
 
-  accept(server_fd, (struct sockaddr *) &client_addr, (socklen_t *) &client_addr_len);
+  // accept(server_fd, (struct sockaddr *) &client_addr, (socklen_t *) &client_addr_len);
+  int client_fd = accept(server_fd, (struct sockaddr*) &client_addr, (socklen_t *) &client_addr_len);
   std::cout << "Client connected\n";
 
+  std::string response = "+PONG\r\n";
+  send(client_fd, response.c_str(), response.size(), 0);
+
+  close(client_fd);
   close(server_fd);
   return 0;
 }
