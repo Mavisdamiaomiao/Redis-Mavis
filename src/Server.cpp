@@ -61,10 +61,28 @@ int main(int argc, char **argv) {
   int client_fd = accept(server_fd, (struct sockaddr*) &client_addr, (socklen_t *) &client_addr_len);
   std::cout << "Client connected\n";
 
-  std::string response = "+PONG\r\n";
-  send(client_fd, response.c_str(), response.size(), 0);
+  // 只处理一次
+  // std::string response = "+PONG\r\n";
+  // send(client_fd, response.c_str(), response.size(), 0);
 
-  //加一句测试
+  while (true) {
+    char buffer[1024] = {0};
+    ssize_t bytes_read = recv(client_fd, buffer, sizeof(buffer) - 1, 0);
+
+    if (bytes_read <= 0) {
+        // 客户端关闭连接或发生错误
+        break;
+    }
+
+    std::string input(buffer);
+
+    if (input.find("PING") != std::string::npos) {
+        std::string response = "+PONG\r\n";
+        send(client_fd, response.c_str(), response.size(), 0);
+    }
+  }
+
+
   close(client_fd);
   close(server_fd);
   return 0;
