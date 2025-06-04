@@ -158,7 +158,8 @@ int main(int argc, char **argv) {
     // std::thread t(handle_client, client_fd);
     // t.detach(); // 分离线程，自动运行和回收资源
 
-    dispatch_client();
+    std::thread t(handle_client, client_fd);
+    t.detach();
   }
 
   close(server_fd);
