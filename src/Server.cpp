@@ -7,7 +7,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netdb.h>
-#include <thread> // 引入线程库
+#include "future_task_dispatcher.h"
 
 void handle_client(int client_fd) {
   while (true) {
@@ -64,13 +64,6 @@ int main(int argc, char **argv) {
     return 1;
   }
   
-  // struct sockaddr_in client_addr;
-  // int client_addr_len = sizeof(client_addr);
-  // std::cout << "Waiting for a client to connect...\n";   // \n等价于std::endl，不过endl会刷新缓冲区，而前面已经设置了自动刷新缓冲区
-
-  // int client_fd = accept(server_fd, (struct sockaddr*) &client_addr, (socklen_t *) &client_addr_len);
-  // std::cout << "Client connected\n";
-
   std::cout << "Server listening on port 6379...\n";
 
   while (true) {
@@ -86,8 +79,10 @@ int main(int argc, char **argv) {
     std::cout << "Client connected\n";
 
     // 多线程处理每个客户端连接
-    std::thread t(handle_client, client_fd);
-    t.detach(); // 分离线程，自动运行和回收资源
+    // std::thread t(handle_client, client_fd);
+    // t.detach(); // 分离线程，自动运行和回收资源
+
+    dispatch_client();
   }
 
   close(server_fd);
