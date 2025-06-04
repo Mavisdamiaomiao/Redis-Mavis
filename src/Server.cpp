@@ -7,7 +7,8 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netdb.h>
-#include "future_task_dispatcher.h" // 里面#include <thread>
+// #include "future_task_dispatcher.h" // 里面#include <thread>
+#include <thread>
 #include <vector>
 #include <algorithm> // std::transform 配合 std::toupper转大写
 #include <cctype> // 使用 std::toupper()
